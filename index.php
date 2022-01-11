@@ -7,6 +7,6 @@
     <title>E-Raport</title>
 </head>
 <body>
-    <h1>Wellcome</h1>
+    <h1>Wellcome E-Raport</h1>
 </body>
 </html>
