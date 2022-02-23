@@ -16,7 +16,7 @@ if(function_exists($_GET['function'])) {
     if($check_match == count($check)){
 
         $user=[];
-        $query = mysqli_query($connect, "SELECT user.id_user AS id_user, user.id_sekolah AS id_sekolah, user.username AS username, user.password AS 'password', user.firstname AS firstname, user.lastname AS lastname, user.role AS 'role', sekolah.nama_sekolah AS nama_sekolah FROM user JOIN sekolah USING (id_sekolah) WHERE user.username= '$_POST[username]' AND user.password= '$_POST[password]'");
+        $query = mysqli_query($connect, "SELECT user.id_user AS id_user, user.id_sekolah AS id_sekolah, user.email AS email, user.username AS username, user.password AS 'password', user.firstname AS firstname, user.lastname AS lastname, user.role AS 'role', sekolah.nama_sekolah AS nama_sekolah, sekolah.alamat AS alamat FROM user JOIN sekolah USING (id_sekolah) WHERE user.username= '$_POST[username]' AND user.password= '$_POST[password]'");
         while ($result = mysqli_fetch_object($query)){
             $user[] = $result;
         }
@@ -43,6 +43,87 @@ if(function_exists($_GET['function'])) {
     header('Content-Type: application/json');
     echo json_encode($response);
 }
+
+function updateUser(){
+    global $connect;
+
+    parse_str(file_get_contents('php://input'), $value);
+
+    $check = array('id_user'=>'', 'id_sekolah'=>'', 'email'=>'', 'username'=>'','password'=>'', 'firstname'=>'', 'lastname'=>'', 'role'=>'');
+    $check_match = count(array_intersect_key($value, $value));
+
+    if($check_match == count($check)){
+        //Update data
+        $result = mysqli_query($connect, "UPDATE `user` SET
+        `id_user`= $value[id_user],
+        `id_sekolah`= $value[id_sekolah],
+        `email`= '$value[email]',
+        `username`= '$value[username]',
+        `password`= '$value[password]',
+        `firstname`= '$value[firstname]',
+        `lastname`= '$value[lastname]',
+        `role`= '$value[role]'
+        WHERE
+        `id_user` = $value[id_user]
+        ");
+
+        if($result){
+            $response = array(
+                'status'=>1,
+                'message'=>'Success Update'
+            );
+        }else{
+            $response = array(
+                'status'=>0,
+                'message'=>'Failed Update.'
+            );
+        }
+
+    } else{
+        $response = array(
+            'status'=>0,
+            'message'=>'Wrong Parameter'
+        );
+    }
+
+    header('Content-Type: application/json');
+    echo json_encode($response);
+
+
+}
+
+//SEKOLAH
+function getAllSekolah(){
+    global $connect;
+
+    if(!mysqli_connect_error()){
+        $query = mysqli_query($connect, "SELECT * FROM sekolah");
+        if(mysqli_num_rows($query)>0){
+            while ($result = mysqli_fetch_object($query)){
+                $sekolah[] = $result;
+            }
+    
+            $response = array(
+                'status' =>1,
+                'message'=>'Success',
+                'sekolah'=>$sekolah
+            );
+    
+            header('Content-Type: application/json');
+            echo json_encode($response); 
+        }else{
+            $response = array(
+                'status' =>0,
+                'message'=>'Failed',
+                'sekolah'=>[]
+            );
+    
+            header('Content-Type: application/json');
+            echo json_encode($response); 
+        }
+    }
+}
+
 
 //SISWA
 function getSiswaSekolah(){
@@ -304,7 +385,7 @@ function updateNilaiSpiritual(){
     $id_siswa = (int) $value["id_siswa"];
 
     $check = array('ketaatan_beribadah'=>'', 'berprilaku_bersyukur'=>'', 'berdoa'=>'', 'toleransi'=>'');
-    $check_match = count(array_intersect_key($_POST, $check));
+    $check_match = count(array_intersect_key($value, $check));
 
     $query = mysqli_query($connect, "SELECT nama_panggilan FROM siswa WHERE id_siswa = $id_siswa");
     while ($result = mysqli_fetch_object($query)){
@@ -326,10 +407,10 @@ function updateNilaiSpiritual(){
 
     if($check_match == count($check) && mysqli_num_rows($query)>0){
         $penilaian = [
-            'ketaatan beribadah'=>$_POST['ketaatan_beribadah'], 
-            'berprilaku bersyukur'=>$_POST['berprilaku_bersyukur'], 
-            'berdoa sebelum dan sesudah melakukan kegiatan'=>$_POST['berdoa'], 
-            'toleransi beribadah'=>$_POST['toleransi']
+            'ketaatan beribadah'=>$value['ketaatan_beribadah'], 
+            'berprilaku bersyukur'=>$value['berprilaku_bersyukur'], 
+            'berdoa sebelum dan sesudah melakukan kegiatan'=>$value['berdoa'], 
+            'toleransi beribadah'=>$value['toleransi']
         ];
 
         //Membuat kalimat per penilaian
@@ -365,10 +446,10 @@ function updateNilaiSpiritual(){
 
         //Update data
         $result = mysqli_query($connect, "UPDATE sikap_spiritual SET
-        ketaatan_beribadah = '$_POST[ketaatan_beribadah]',
-        berprilaku_bersyukur = '$_POST[berprilaku_bersyukur]',
-        berdoa = '$_POST[berdoa]',
-        toleransi = '$_POST[toleransi]',
+        ketaatan_beribadah = '$value[ketaatan_beribadah]',
+        berprilaku_bersyukur = '$value[berprilaku_bersyukur]',
+        berdoa = '$value[berdoa]',
+        toleransi = '$value[toleransi]',
         deskripsi = '$deskripsi' 
         WHERE id_siswa = '$id_siswa' AND semester = '$semester' AND tahun_ajaran = '$tahun_ajaran'
         ");
@@ -577,7 +658,7 @@ function updateNilaiSosial(){
     $id_siswa = (int) $value["id_siswa"];
     
     $check = array('jujur'=>'', 'disiplin'=>'', 'tanggung_jawab'=>'', 'santun'=>'', 'peduli'=>'', 'percaya_diri'=>'');
-    $check_match = count(array_intersect_key($_POST, $check));
+    $check_match = count(array_intersect_key($value, $check));
 
     $query = mysqli_query($connect, "SELECT semester, tahun_ajaran, nama_panggilan FROM siswa WHERE id_siswa = $id_siswa");
         while ($result = mysqli_fetch_object($query)){
@@ -591,12 +672,12 @@ function updateNilaiSosial(){
 
     if($check_match == count($check) && mysqli_num_rows($query)>0){
         $penilaian = [
-            'jujur'=>$_POST['jujur'], 
-            'disiplin'=>$_POST['disiplin'], 
-            'tanggung jawab'=>$_POST['tanggung_jawab'], 
-            'santun'=>$_POST['santun'],
-            'peduli'=>$_POST['peduli'],
-            'percaya diri'=>$_POST['percaya_diri'],
+            'jujur'=>$value['jujur'], 
+            'disiplin'=>$value['disiplin'], 
+            'tanggung jawab'=>$value['tanggung_jawab'], 
+            'santun'=>$value['santun'],
+            'peduli'=>$value['peduli'],
+            'percaya diri'=>$value['percaya_diri'],
         ];
 
         //Membuat kalimat per penilaian
@@ -632,12 +713,12 @@ function updateNilaiSosial(){
 
         //Update data
         $result = mysqli_query($connect, "UPDATE sikap_sosial SET
-        jujur = '$_POST[jujur]',
-        disiplin = '$_POST[disiplin]',
-        tanggung_jawab = '$_POST[tanggung_jawab]',
-        santun = '$_POST[santun]',
-        peduli = '$_POST[peduli]',
-        percaya_diri = '$_POST[percaya_diri]',
+        jujur = '$value[jujur]',
+        disiplin = '$value[disiplin]',
+        tanggung_jawab = '$value[tanggung_jawab]',
+        santun = '$value[santun]',
+        peduli = '$value[peduli]',
+        percaya_diri = '$value[percaya_diri]',
         deskripsi = '$deskripsi' 
         WHERE id_siswa = '$id_siswa' AND semester = '$semester' AND tahun_ajaran = '$tahun_ajaran'
         ");

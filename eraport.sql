@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 01 Feb 2022 pada 18.35
+-- Waktu pembuatan: 23 Feb 2022 pada 04.53
 -- Versi server: 10.4.21-MariaDB
 -- Versi PHP: 8.0.11
 
@@ -413,6 +413,7 @@ INSERT INTO `tema_mapel` (`id_tm`, `id_mapel`, `id_tema`, `id_kd`) VALUES
 CREATE TABLE `user` (
   `id_user` int(11) NOT NULL,
   `id_sekolah` int(11) DEFAULT NULL,
+  `email` varchar(100) NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `firstname` varchar(255) NOT NULL,
@@ -424,11 +425,11 @@ CREATE TABLE `user` (
 -- Dumping data untuk tabel `user`
 --
 
-INSERT INTO `user` (`id_user`, `id_sekolah`, `username`, `password`, `firstname`, `lastname`, `role`) VALUES
-(1, 1, 'admin', 'admin', 'admin', 'admin', 'admin'),
-(2, 1, 'aldi', 'aldioka', 'aldi', 'oka', 'guru'),
-(3, 3, 'yulicahyani', 'yalicahyani', 'yuli', 'cahyani', 'guru'),
-(4, 2, 'arisurya', 'arisurya', 'ari', 'surya', 'guru');
+INSERT INTO `user` (`id_user`, `id_sekolah`, `email`, `username`, `password`, `firstname`, `lastname`, `role`) VALUES
+(1, 1, 'admin@gmail.com', 'admin', 'admin', 'admin', 'admin', 'admin'),
+(2, 1, 'aldy@gmail.com', 'aldyoka', 'aldyoka', 'Aldy', 'Oka', 'guru'),
+(3, 3, 'yuli@gmail.com', 'yulicahyani', 'yalicahyani', 'yuli', 'cahyani', 'guru'),
+(4, 2, 'arisurya@gmail.com', 'arisurya', 'arisurya', 'Kadek Ari', 'Surya', 'guru');
 
 --
 -- Indexes for dumped tables
