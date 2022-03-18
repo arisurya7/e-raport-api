@@ -273,7 +273,7 @@ function getSikapSpritualSiswa(){
         }
         $id_sekolah = $user[0]->id_sekolah;
 
-        $query = mysqli_query($connect, "SELECT siswa.nama_siswa, sikap_spiritual.deskripsi FROM siswa LEFT JOIN sikap_spiritual USING (id_siswa) WHERE siswa.id_sekolah=$id_sekolah");
+        $query = mysqli_query($connect, "SELECT siswa.id_siswa, siswa.nama_siswa, sikap_spiritual.deskripsi FROM siswa LEFT JOIN sikap_spiritual USING (id_siswa) WHERE siswa.id_sekolah=$id_sekolah");
         while ($result = mysqli_fetch_object($query)){
             $data[] = $result;
         }
@@ -281,8 +281,56 @@ function getSikapSpritualSiswa(){
         $response = array(
             'status' =>1,
             'message'=>'Success',
-            'siswa'=>$data
+            'nilaisikap'=>$data
         );
+
+        header('Content-Type: application/json');
+        echo json_encode($response);    
+         
+    }
+}
+
+function getDetailSikapSpritualSiswa(){
+    global $connect;
+
+    if (!empty($_GET["id_siswa"])) {
+        $id_siswa = (int) $_GET["id_siswa"];      
+    }else{
+        $response = array(
+            'status'=>0,
+            'message'=>'Error, need id_siswa'
+        );
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    if(!mysqli_connect_error()){
+
+        $query = mysqli_query($connect, "SELECT * FROM siswa WHERE id_siswa=$id_siswa");
+        while ($result = mysqli_fetch_object($query)){
+            $user[] = $result;
+        }
+        $semester = $user[0]->semester;
+        $tahun_ajaran = $user[0]->tahun_ajaran;
+
+        $query = mysqli_query($connect, "SELECT * FROM sikap_spiritual WHERE id_siswa=$id_siswa AND semester='$semester' AND tahun_ajaran='$tahun_ajaran'");
+        while ($result = mysqli_fetch_object($query)){
+            $data[] = $result;
+        }
+
+        if(isset($data)){
+            $response = array(
+                'status' =>1,
+                'message'=>'Success',
+                'nilai'=>$data
+            );
+        }else{
+            $response = array(
+                'status' =>0,
+                'message'=>'Failed'
+            );
+        }
 
         header('Content-Type: application/json');
         echo json_encode($response);    
@@ -383,17 +431,13 @@ function updateNilaiSpiritual(){
     //Mengambil parameter PUT
     parse_str(file_get_contents('php://input'), $value);
     $id_siswa = (int) $value["id_siswa"];
+    $ketaatan_beribadah = $value["ketaatan_beribadah"];
+    $berprilaku_bersyukur = $value["berprilaku_bersyukur"];
+    $berdoa = $value["berdoa"];
+    $toleransi = $value["toleransi"];
 
     $check = array('ketaatan_beribadah'=>'', 'berprilaku_bersyukur'=>'', 'berdoa'=>'', 'toleransi'=>'');
     $check_match = count(array_intersect_key($value, $check));
-
-    $query = mysqli_query($connect, "SELECT nama_panggilan FROM siswa WHERE id_siswa = $id_siswa");
-    while ($result = mysqli_fetch_object($query)){
-        $siswa[] = $result;
-    }
-    $semester = (int) $siswa[0]->semester;
-    $tahun_ajaran = $siswa[0]->tahun_ajaran;
-    $nickname = $siswa[0]->nama_panggilan;
     
     $query = mysqli_query($connect, "SELECT semester, tahun_ajaran, nama_panggilan FROM siswa WHERE id_siswa = $id_siswa");
     while ($result = mysqli_fetch_object($query)){
@@ -446,12 +490,12 @@ function updateNilaiSpiritual(){
 
         //Update data
         $result = mysqli_query($connect, "UPDATE sikap_spiritual SET
-        ketaatan_beribadah = '$value[ketaatan_beribadah]',
-        berprilaku_bersyukur = '$value[berprilaku_bersyukur]',
-        berdoa = '$value[berdoa]',
-        toleransi = '$value[toleransi]',
+        ketaatan_beribadah = '$ketaatan_beribadah',
+        berprilaku_bersyukur = '$berprilaku_bersyukur',
+        berdoa = '$berdoa',
+        toleransi = '$toleransi',
         deskripsi = '$deskripsi' 
-        WHERE id_siswa = '$id_siswa' AND semester = '$semester' AND tahun_ajaran = '$tahun_ajaran'
+        WHERE id_siswa = $id_siswa AND semester = $semester AND tahun_ajaran = '$tahun_ajaran'
         ");
 
         if($result){
@@ -519,6 +563,54 @@ function getNilaiAkhirSikapSosial(){
     }
 }
 
+function getDetailSikapSosialSiswa(){
+    global $connect;
+
+    if (!empty($_GET["id_siswa"])) {
+        $id_siswa = (int) $_GET["id_siswa"];      
+    }else{
+        $response = array(
+            'status'=>0,
+            'message'=>'Error, need id_siswa'
+        );
+        header('Content-Type: application/json');
+        echo json_encode($response);
+        exit();
+    }
+
+    if(!mysqli_connect_error()){
+
+        $query = mysqli_query($connect, "SELECT * FROM siswa WHERE id_siswa=$id_siswa");
+        while ($result = mysqli_fetch_object($query)){
+            $user[] = $result;
+        }
+        $semester = $user[0]->semester;
+        $tahun_ajaran = $user[0]->tahun_ajaran;
+
+        $query = mysqli_query($connect, "SELECT * FROM sikap_sosial WHERE id_siswa=$id_siswa AND semester='$semester' AND tahun_ajaran='$tahun_ajaran'");
+        while ($result = mysqli_fetch_object($query)){
+            $data[] = $result;
+        }
+
+        if(isset($data)){
+            $response = array(
+                'status' =>1,
+                'message'=>'Success',
+                'nilai'=>$data
+            );
+        }else{
+            $response = array(
+                'status' =>0,
+                'message'=>'Failed'
+            );
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($response);    
+         
+    }
+}
+
 function getSikapSosialSiswa(){
     global $connect;
 
@@ -542,7 +634,7 @@ function getSikapSosialSiswa(){
         }
         $id_sekolah = $user[0]->id_sekolah;
 
-        $query = mysqli_query($connect, "SELECT siswa.nama_siswa, sikap_sosial.deskripsi FROM siswa LEFT JOIN sikap_sosial USING (id_siswa) WHERE siswa.id_sekolah=$id_sekolah");
+        $query = mysqli_query($connect, "SELECT siswa.id_siswa, siswa.nama_siswa, sikap_sosial.deskripsi FROM siswa LEFT JOIN sikap_sosial USING (id_siswa) WHERE siswa.id_sekolah=$id_sekolah");
         while ($result = mysqli_fetch_object($query)){
             $data[] = $result;
         }
@@ -550,7 +642,7 @@ function getSikapSosialSiswa(){
         $response = array(
             'status' =>1,
             'message'=>'Success',
-            'siswa'=>$data
+            'nilaisikap'=>$data
         );
 
         header('Content-Type: application/json');
@@ -656,6 +748,12 @@ function updateNilaiSosial(){
     //Mengambil parameter PUT
     parse_str(file_get_contents('php://input'), $value);
     $id_siswa = (int) $value["id_siswa"];
+    $jujur = $value["jujur"];
+    $disiplin = $value["disiplin"];
+    $tanggung_jawab = $value["tanggung_jawab"];
+    $santun = $value["santun"];
+    $peduli = $value["peduli"];
+    $percaya_diri = $value["percaya_diri"];
     
     $check = array('jujur'=>'', 'disiplin'=>'', 'tanggung_jawab'=>'', 'santun'=>'', 'peduli'=>'', 'percaya_diri'=>'');
     $check_match = count(array_intersect_key($value, $check));
@@ -713,14 +811,14 @@ function updateNilaiSosial(){
 
         //Update data
         $result = mysqli_query($connect, "UPDATE sikap_sosial SET
-        jujur = '$value[jujur]',
-        disiplin = '$value[disiplin]',
-        tanggung_jawab = '$value[tanggung_jawab]',
-        santun = '$value[santun]',
-        peduli = '$value[peduli]',
-        percaya_diri = '$value[percaya_diri]',
+        jujur = '$jujur',
+        disiplin = '$disiplin',
+        tanggung_jawab = '$tanggung_jawab',
+        santun = '$santun',
+        peduli = '$peduli',
+        percaya_diri = '$percaya_diri',
         deskripsi = '$deskripsi' 
-        WHERE id_siswa = '$id_siswa' AND semester = '$semester' AND tahun_ajaran = '$tahun_ajaran'
+        WHERE id_siswa = $id_siswa AND semester = $semester AND tahun_ajaran = '$tahun_ajaran'
         ");
 
         if($result){
