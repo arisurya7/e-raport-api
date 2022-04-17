@@ -191,6 +191,83 @@ function getAllSekolah(){
 
 
 //SISWA
+function createUserSiswa(){
+    global $connect;
+
+    $check = array('id_sekolah'=>'', 'username'=>'', 'password'=>'', 'nis'=>'', 'nisn'=>'', 'nama_siswa' => '', 'nama_panggilan' =>'', 'ttl'=>'', 'jenis_kelamin'=>'', 'agama'=>'', 'alamat'=>'', 'kelas'=>'', 'semester'=>'', 'tahun_ajaran'=>'');
+    $check_match = count(array_intersect_key($_POST, $check));
+
+    if($check_match == count($check)){
+        //Insert data
+        $result = mysqli_query($connect, "INSERT INTO siswa SET
+        `id_sekolah` = '$_POST[id_sekolah]',
+        `username` = '$_POST[username]',
+        `password` = '$_POST[password]',
+        `nis` = '$_POST[nis]',
+        `nisn` = '$_POST[nisn]',
+        `nama_siswa` = '$_POST[nama_siswa]',
+        `nama_panggilan` = '$_POST[nama_panggilan]',
+        `ttl` = '$_POST[ttl]',
+        `jenis_kelamin` = '$_POST[jenis_kelamin]',
+        `agama` = '$_POST[agama]',
+        `kelas` = '$_POST[kelas]',
+        `semester` = '$_POST[semester]',
+        `alamat` = '$_POST[alamat]',
+        `tahun_ajaran` = '$_POST[tahun_ajaran]'
+        ");
+
+        if($result){
+            $response = array(
+                'status'=>1,
+                'message'=>'Insert Success'
+            );
+        }else{
+            $response = array(
+                'status'=>0,
+                'message'=>'Insert Failed.'
+            );
+        }
+    } else{
+        $response = array(
+            'status'=>0,
+            'message'=>'Wrong Parameter'
+        );
+    }
+
+    header('Content-Type: application/json');
+    echo json_encode($response);
+}
+
+function deleteUserSiswa(){
+    global $connect;
+
+    parse_str(file_get_contents('php://input'), $value);
+
+    $check = array('id_siswa'=>'');
+    $check_match = count(array_intersect_key($value, $value));
+
+    $result = mysqli_query($connect, "DELETE FROM siswa WHERE `id_siswa` = $value[id_siswa]");
+    if(mysqli_affected_rows($connect) != 0){
+        $response = array(
+            'status'=>1,
+            'message'=>'Success Update'
+        );
+    }else{
+        $response = array(
+            'status'=>0,
+            'message'=>'Failed Update.'
+        );
+        }
+
+    header('Content-Type: application/json');
+    echo json_encode($response);
+
+
+}
+
+
+
+
 function getSiswaSekolah(){
     global $connect;
 
