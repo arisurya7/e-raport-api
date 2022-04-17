@@ -861,6 +861,7 @@ function getNilaiFinalPengetahuan(){
 
     if(!mysqli_connect_error()){
 
+        #mencari semester dan tahun ajaran
         $query = mysqli_query($connect, "SELECT semester, tahun_ajaran FROM siswa WHERE id_siswa = $id_siswa");
         while ($result = mysqli_fetch_object($query)){
             $siswa[] = $result;
@@ -868,10 +869,35 @@ function getNilaiFinalPengetahuan(){
         $semester = $siswa[0]->semester;
         $tahun_ajaran = $siswa[0]->tahun_ajaran;
 
-        $data = [];
+        #mencari nilai final 
+        $nilaifinalpengetahuan = [];
         $query = mysqli_query($connect, "SELECT * FROM final_nilai_pengetahuan WHERE id_siswa = '$id_siswa' AND semester = '$semester' AND tahun_ajaran = '$tahun_ajaran'");
         while ($result = mysqli_fetch_object($query)){
+            $nilaifinalpengetahuan[] = $result;
+        }
+
+        #mencari semua mapel
+        $query = mysqli_query($connect, "SELECT id_mapel, nama_mapel FROM mapel");
+        while ($result = mysqli_fetch_object($query)){
             $data[] = $result;
+        }
+
+        foreach($data as $key => $value){
+            $data[$key]->id_siswa = $id_siswa;
+            $data[$key]->semester = $semester;      
+            $data[$key]->tahun_ajaran = $tahun_ajaran;       
+            $data[$key]->nilai_akhir = '';
+            $data[$key]->predikat = '';
+            $data[$key]->deskripsi = '';
+            if(isset($nilaifinalpengetahuan)){
+                foreach($nilaifinalpengetahuan as $key_nf => $value_nf){
+                    if( ($data[$key]->id_mapel == $nilaifinalpengetahuan[$key_nf]->id_mapel) ){
+                        $data[$key]->nilai_akhir = $nilaifinalpengetahuan[$key_nf]->nilai_akhir;
+                        $data[$key]->predikat = $nilaifinalpengetahuan[$key_nf]->predikat;
+                        $data[$key]->deskripsi = $nilaifinalpengetahuan[$key_nf]->deskripsi;
+                    }
+                }
+            }                
         }
 
         $response = array(
@@ -892,8 +918,6 @@ function getNilaiFinalPengetahuan(){
         header('Content-Type: application/json');
         echo json_encode($response);
     }
-
-
 
 }
 
@@ -951,7 +975,7 @@ function getNilaiPengetahuanSiswa(){
                 $data[$key]->is_nph = $is_nph;
                 $data[$key]->is_npts = $is_npts;
                 $data[$key]->is_npas = $is_npas;
-                $data[$key]->nilai_kd = '0';
+                $data[$key]->nilai_kd = '';
                 if(isset($nilai_pengetahuan)){
                     foreach($nilai_pengetahuan as $key_np => $value_np){
                         if( ($data[$key]->is_nph == $nilai_pengetahuan[$key_np]->is_nph) && ($data[$key]->is_npts == $nilai_pengetahuan[$key_np]->is_npts) && ($data[$key]->is_npas == $nilai_pengetahuan[$key_np]->is_npas) && ($data[$key]->id_kd == $nilai_pengetahuan[$key_np]->id_kd) ){
@@ -989,7 +1013,7 @@ function getNilaiPengetahuanSiswa(){
                 $data[$key]->is_nph = $is_nph;
                 $data[$key]->is_npts = $is_npts;
                 $data[$key]->is_npas = $is_npas;
-                $data[$key]->nilai_kd = '0';
+                $data[$key]->nilai_kd = '';
                 if(isset($nilai_pengetahuan)){
                     foreach($nilai_pengetahuan as $key_np => $value_np){
                         if( ($data[$key]->is_nph == $nilai_pengetahuan[$key_np]->is_nph) && ($data[$key]->is_npts == $nilai_pengetahuan[$key_np]->is_npts) && ($data[$key]->is_npas == $nilai_pengetahuan[$key_np]->is_npas) && ($data[$key]->id_kd == $nilai_pengetahuan[$key_np]->id_kd) && ($data[$key]->id_tema == $nilai_pengetahuan[$key_np]->id_tema) ){
@@ -1250,6 +1274,7 @@ function getNilaiFinalKeterampilan(){
 
     if(!mysqli_connect_error()){
 
+        #mencari semester dan tahun ajaran
         $query = mysqli_query($connect, "SELECT semester, tahun_ajaran FROM siswa WHERE id_siswa = $id_siswa");
         while ($result = mysqli_fetch_object($query)){
             $siswa[] = $result;
@@ -1257,11 +1282,37 @@ function getNilaiFinalKeterampilan(){
         $semester = $siswa[0]->semester;
         $tahun_ajaran = $siswa[0]->tahun_ajaran;
 
-        $data = [];
+        #mencari nilai final
+        $nilaifinalketerampilan = [];
         $query = mysqli_query($connect, "SELECT * FROM final_nilai_keterampilan WHERE id_siswa = '$id_siswa' AND semester = '$semester' AND tahun_ajaran = '$tahun_ajaran'");
+        while ($result = mysqli_fetch_object($query)){
+            $nilaifinalketerampilan[] = $result;
+        }
+
+        #mencari semua mapel
+        $query = mysqli_query($connect, "SELECT id_mapel, nama_mapel FROM mapel");
         while ($result = mysqli_fetch_object($query)){
             $data[] = $result;
         }
+
+        foreach($data as $key => $value){
+            $data[$key]->id_siswa = $id_siswa;
+            $data[$key]->semester = $semester;      
+            $data[$key]->tahun_ajaran = $tahun_ajaran;       
+            $data[$key]->nilai_akhir = '';
+            $data[$key]->predikat = '';
+            $data[$key]->deskripsi = '';
+            if(isset($nilaifinalketerampilan)){
+                foreach($nilaifinalketerampilan as $key_nf => $value_nf){
+                    if( ($data[$key]->id_mapel == $nilaifinalketerampilan[$key_nf]->id_mapel) ){
+                        $data[$key]->nilai_akhir = $nilaifinalketerampilan[$key_nf]->nilai_akhir;
+                        $data[$key]->predikat = $nilaifinalketerampilan[$key_nf]->predikat;
+                        $data[$key]->deskripsi = $nilaifinalketerampilan[$key_nf]->deskripsi;
+                    }
+                }
+            }                
+        }
+
 
         $response = array(
             'status' =>1,
