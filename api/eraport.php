@@ -1039,7 +1039,7 @@ function getNilaiPengetahuanSiswa(){
 
         //Mapel Agama Hindu dan Mulok
         if($id_mapel == 1 || $mapel[0]->is_mulok == 1){
-            $query = mysqli_query($connect, "SELECT kompetensi_dasar.id_kd, kompetensi_dasar.kode_kd from kompetensi_dasar WHERE kategori_kd = '$kategori_mapel' AND id_mapel = $id_mapel");
+            $query = mysqli_query($connect, "SELECT kompetensi_dasar.id_kd, kompetensi_dasar.kode_kd, kompetensi_dasar.deskripsi_kd from kompetensi_dasar WHERE kategori_kd = '$kategori_mapel' AND id_mapel = $id_mapel");
             while ($result = mysqli_fetch_object($query)){
                 $data[] = $result;
             }
@@ -1065,7 +1065,7 @@ function getNilaiPengetahuanSiswa(){
             $response = array(
                 'status' =>1,
                 'message'=>'Success',
-                'siswa'=>$data
+                'nilaipengetahuan'=>$data
             );
     
             header('Content-Type: application/json');
@@ -1076,7 +1076,7 @@ function getNilaiPengetahuanSiswa(){
         //Mapel selain mulok
         else{
             $query = mysqli_query($connect, 
-            "SELECT tema.id_tema, tema.nama_tema, kompetensi_dasar.id_kd, kompetensi_dasar.kode_kd 
+            "SELECT tema.id_tema, tema.nama_tema, kompetensi_dasar.id_kd, kompetensi_dasar.kode_kd, kompetensi_dasar.deskripsi_kd 
             FROM tema_mapel JOIN tema USING(id_tema) JOIN kompetensi_dasar USING(id_kd) 
             WHERE (tema_mapel.id_mapel = $id_mapel AND kompetensi_dasar.kategori_kd = '$kategori_mapel') AND (tema.is_nph = '$is_nph' OR tema.is_npts = '$is_npts' OR tema.is_npas = '$is_npas')"
             );
@@ -1103,7 +1103,7 @@ function getNilaiPengetahuanSiswa(){
             $response = array(
                 'status' =>1,
                 'message'=>'Success',
-                'siswa'=>$data
+                'nilaipengetahuan'=>$data
             );
     
             header('Content-Type: application/json');
