@@ -44,6 +44,40 @@ if(function_exists($_GET['function'])) {
     echo json_encode($response);
 }
 
+function createUser(){
+    global $connect;
+    
+    $check = array('id_sekolah'=>'', 'email'=>'', 'username'=>'', 'password'=>'', 'firstname'=>'', 'lastname'=>'', 'role'=>'');
+    $check_match = count(array_intersect_key($_POST, $check));
+
+    if($check_match == count($check)){
+        //Insert data
+        $result = mysqli_query($connect, "INSERT INTO user SET
+        `id_sekolah`= $_POST[id_sekolah],
+        `email`= '$_POST[email]',
+        `username`= '$_POST[username]',
+        `password`= '$_POST[password]',
+        `firstname`= '$_POST[firstname]',
+        `lastname`= '$_POST[lastname]',
+        `role`= '$_POST[role]'
+        ");
+
+        $response = array(
+            'status'=>1,
+            'message'=>'Insert Success'
+        );
+
+    } else{
+        $response = array(
+            'status'=>0,
+            'message'=>'Wrong Parameter'
+        );
+    }
+
+    header('Content-Type: application/json');
+    echo json_encode($response);
+}
+
 function updateUser(){
     global $connect;
 
@@ -88,9 +122,40 @@ function updateUser(){
 
     header('Content-Type: application/json');
     echo json_encode($response);
-
-
 }
+
+function deleteUser(){
+    global $connect;
+    
+    parse_str(file_get_contents('php://input'), $value);
+
+    if($value['id_user']){
+        //Delete data
+        $result = mysqli_query($connect, "DELETE FROM user WHERE `id_user`= $value[id_user]");
+
+        if(mysqli_affected_rows($connect)){
+            $response = array(
+                'status'=>1,
+                'message'=>'Success Delete'
+            );
+        }else{
+            $response = array(
+                'status'=>0,
+                'message'=>'Not Found'
+            );
+        }
+
+    } else{
+        $response = array(
+            'status'=>0,
+            'message'=>'Wrong Parameter'
+        );
+    }
+
+    header('Content-Type: application/json');
+    echo json_encode($response);
+}
+
 
 //SEKOLAH
 function getAllSekolah(){
@@ -126,6 +191,56 @@ function getAllSekolah(){
 
 
 //SISWA
+function updateUserSiswa(){
+    global $connect;
+
+    parse_str(file_get_contents('php://input'), $value);
+
+    $check = array('id_siswa'=>'','id_sekolah'=>'', 'username'=>'', 'password'=>'', 'nis'=>'', 'nisn'=>'', 'nama_siswa' => '', 'nama_panggilan' =>'', 'ttl'=>'', 'jenis_kelamin'=>'', 'agama'=>'', 'alamat'=>'', 'kelas'=>'', 'semester'=>'', 'tahun_ajaran'=>'');
+    $check_match = count(array_intersect_key($value, $value));
+    if($check_match == count($check)){
+        $result = mysqli_query($connect, "UPDATE `siswa` SET
+        `id_sekolah` = '$value[id_sekolah]',
+        `username` = '$value[username]',
+        `password` = '$value[password]',
+        `nis` = '$value[nis]',
+        `nisn` = '$value[nisn]',
+        `nama_siswa` = '$value[nama_siswa]',
+        `nama_panggilan` = '$value[nama_panggilan]',
+        `ttl` = '$value[ttl]',
+        `jenis_kelamin` = '$value[jenis_kelamin]',
+        `agama` = '$value[agama]',
+        `kelas` = '$value[kelas]',
+        `semester` = '$value[semester]',
+        `alamat` = '$value[alamat]',
+        `tahun_ajaran` = '$value[tahun_ajaran]'
+        WHERE
+        `id_siswa` = $value[id_siswa]
+        ");
+
+        if($result){
+            $response = array(
+                'status'=>1,
+                'message'=>'Success Update'
+            );
+        }else{
+            $response = array(
+                'status'=>0,
+                'message'=>'Failed Update.'
+            );
+        }
+
+    } else{
+        $response = array(
+            'status'=>0,
+            'message'=>'Wrong Parameter'
+        );
+    }
+
+    header('Content-Type: application/json');
+    echo json_encode($response);
+}
+
 function createUserSiswa(){
     global $connect;
 
@@ -281,8 +396,6 @@ function getMapel(){
     }
 }
 
-function getDetailMapel(){
-}
 
 //NILAI SIKAP SPIRITUAL
 function getNilaiAkhirSikapSpiritual(){
