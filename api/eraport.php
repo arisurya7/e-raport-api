@@ -1138,12 +1138,13 @@ function getNilaiPengetahuanSiswa(){
             $mapel[] = $result;
         }
         
-        $query = mysqli_query($connect, "SELECT semester, tahun_ajaran FROM siswa WHERE id_siswa = $id_siswa");
+        $query = mysqli_query($connect, "SELECT semester, tahun_ajaran, nama_siswa FROM siswa WHERE id_siswa = $id_siswa");
         while ($result = mysqli_fetch_object($query)){
             $siswa[] = $result;
         }
         $semester = $siswa[0]->semester;
         $tahun_ajaran = $siswa[0]->tahun_ajaran;
+        $nama_siswa = $siswa[0]->nama_siswa;
 
         $query = mysqli_query($connect, "SELECT * FROM nilai_pengetahuan WHERE id_siswa = '$id_siswa' AND semester = '$semester' AND tahun_ajaran = '$tahun_ajaran' AND id_mapel = '$id_mapel'");
         while ($result = mysqli_fetch_object($query)){
@@ -1159,6 +1160,7 @@ function getNilaiPengetahuanSiswa(){
 
             foreach($data as $key => $value){
                 $data[$key]->id_siswa = $id_siswa;
+                $data[$key]->nama_siswa = $nama_siswa;
                 $data[$key]->id_mapel = $id_mapel;
                 $data[$key]->nama_tema = '';      //mapel agama dan mulok tidak punya tema
                 $data[$key]->id_tema = '0';       //mapel agama dan mulok tidak punya tema
@@ -1199,6 +1201,7 @@ function getNilaiPengetahuanSiswa(){
 
             foreach($data as $key => $value){
                 $data[$key]->id_siswa = $id_siswa;
+                $data[$key]->nama_siswa = $nama_siswa;
                 $data[$key]->id_mapel = $id_mapel;
                 $data[$key]->is_nph = $is_nph;
                 $data[$key]->is_npts = $is_npts;
