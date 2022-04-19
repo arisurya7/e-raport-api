@@ -1545,12 +1545,13 @@ function getNilaiKeterampilanSiswa(){
 
     if(!mysqli_connect_error()){
         
-        $query = mysqli_query($connect, "SELECT semester, tahun_ajaran FROM siswa WHERE id_siswa = $id_siswa");
+        $query = mysqli_query($connect, "SELECT semester, tahun_ajaran, nama_siswa FROM siswa WHERE id_siswa = $id_siswa");
         while ($result = mysqli_fetch_object($query)){
             $siswa[] = $result;
         }
         $semester = $siswa[0]->semester;
         $tahun_ajaran = $siswa[0]->tahun_ajaran;
+        $nama_siswa = $siswa[0]->nama_siswa;
 
         $query = mysqli_query($connect, "SELECT * FROM nilai_keterampilan WHERE id_siswa = '$id_siswa' AND semester = '$semester' AND tahun_ajaran = '$tahun_ajaran' AND id_mapel = '$id_mapel'");
         while ($result = mysqli_fetch_object($query)){
@@ -1562,7 +1563,7 @@ function getNilaiKeterampilanSiswa(){
             $keterampilan[] = $result;
         }
 
-        $query = mysqli_query($connect, "SELECT kompetensi_dasar.id_kd, kompetensi_dasar.kode_kd from kompetensi_dasar WHERE kategori_kd = 'keterampilan' AND id_mapel = $id_mapel");
+        $query = mysqli_query($connect, "SELECT kompetensi_dasar.id_kd, kompetensi_dasar.kode_kd, kompetensi_dasar.deskripsi_kd from kompetensi_dasar WHERE kategori_kd = 'keterampilan' AND id_mapel = $id_mapel");
         while ($result = mysqli_fetch_object($query)){
             $kd_keterampilan[] = $result;
         }
@@ -1570,7 +1571,7 @@ function getNilaiKeterampilanSiswa(){
         $data=[];
         foreach($kd_keterampilan as $key => $kd){
             foreach($keterampilan as $kt){
-                array_push($data,['id_mapel'=>$id_mapel, 'id_kd'=>$kd->id_kd, 'kode_kd'=>$kd->kode_kd, 'id_kt'=>$kt->id_kt, 'nama_keterampilan'=>$kt->nama_keterampilan, 'nilai_kt'=>'0']);
+                array_push($data,['id_siswa'=>$id_siswa, 'nama_siswa'=>$nama_siswa, 'id_mapel'=>$id_mapel, 'id_kd'=>$kd->id_kd, 'kode_kd'=>$kd->kode_kd, 'deskripsi_kd'=>$kd->deskripsi_kd, 'id_kt'=>$kt->id_kt, 'nama_keterampilan'=>$kt->nama_keterampilan, 'nilai_kt'=>'']);
             }
         }
 
@@ -1587,7 +1588,7 @@ function getNilaiKeterampilanSiswa(){
         $response = array(
             'status' =>1,
             'message'=>'Success',
-            'siswa'=>$data
+            'nilaiketerampilan'=>$data
         );
 
         header('Content-Type: application/json');
