@@ -44,6 +44,37 @@ if(function_exists($_GET['function'])) {
     echo json_encode($response);
 }
 
+function getAllUser(){
+    global $connect;
+
+    if(!mysqli_connect_error()){
+        $query = mysqli_query($connect, "SELECT * FROM user");
+        if(mysqli_num_rows($query)>0){
+            while ($result = mysqli_fetch_object($query)){
+                $user[] = $result;
+            }
+    
+            $response = array(
+                'status' =>1,
+                'message'=>'Success',
+                'user'=>$user
+            );
+    
+            header('Content-Type: application/json');
+            echo json_encode($response); 
+        }else{
+            $response = array(
+                'status' =>0,
+                'message'=>'Failed',
+                'user'=>[]
+            );
+    
+            header('Content-Type: application/json');
+            echo json_encode($response); 
+        }
+    }
+}
+
 function createUser(){
     global $connect;
     
