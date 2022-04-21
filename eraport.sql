@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1
+-- version 5.0.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 23 Feb 2022 pada 04.53
--- Versi server: 10.4.21-MariaDB
--- Versi PHP: 8.0.11
+-- Waktu pembuatan: 21 Apr 2022 pada 15.52
+-- Versi server: 10.4.11-MariaDB
+-- Versi PHP: 7.4.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -141,7 +141,31 @@ INSERT INTO `kompetensi_dasar` (`id_kd`, `id_mapel`, `kode_kd`, `kategori_kd`, `
 (45, 4, '4.1', 'keterampilan', 'menyelesaikan masalah yang melibatkan penggunaan sifat-sifat operasi hitung'),
 (46, 4, '4.2', 'keterampilan', 'menggunakan penyajian bilangan cacah dan pecahan sederhanam'),
 (47, 4, '4.3', 'keterampilan', 'menilai apakah suatu bilangan dapat dinyatakan sebagai jumlah, selisih, hasil kali, atau hasil bagi'),
-(48, 4, '4.7', 'keterampilan', 'menyelesaikan masalah yang berkaitan dengan hubungan antarsatuan baku');
+(48, 4, '4.7', 'keterampilan', 'menyelesaikan masalah yang berkaitan dengan hubungan antarsatuan baku'),
+(49, 5, '3.1', 'pengetahuan', 'mengetahui unsur-unsur seni rupa dalam karya dekoratif'),
+(50, 5, '3.2', 'pengetahuan', 'mengetahui bentuk dan variasi pola irama dalam lagu'),
+(51, 5, '3.3', 'pengetahuan', 'mengetahui dinamika gerak tari'),
+(52, 5, '3.4', 'pengetahuan', 'mengetahui teknik potong, lipat, dan sambung'),
+(53, 5, '4.1', 'keterampilan', 'membuat karya dekoratif'),
+(54, 5, '4.2', 'keterampilan', 'menampilkan  bentuk dan  variasi irama melalui lagu'),
+(55, 5, '4.3', 'keterampilan', 'meragakan dinamika gerak  tari'),
+(56, 5, '4.4', 'keterampilan', 'membuat karya dengan teknik potong, lipat, dan sambung'),
+(57, 6, '3.1', 'pengetahuan', 'memahami kombinasi gerak dasar lokomotor'),
+(58, 6, '3.2', 'pengetahuan', 'memahami kombinasi gerak dasar non-lokomotor'),
+(59, 6, '3.3', 'pengetahuan', 'memahami kombinasi gerak dasar manipulatif'),
+(60, 6, '3.8', 'pengetahuan', 'memahami bentuk dan manfaat istirahat'),
+(61, 6, '3.9', 'pengetahuan', 'memahami perlunya memilih makanan bergizi dan sehat'),
+(62, 6, '4.1', 'keterampilan', 'mempraktikkan kombinasi gerak dasar lokomotor'),
+(63, 6, '4.2', 'keterampilan', 'mempraktikkan gerak kombinasi gerak dasar nonlokomotor'),
+(64, 6, '4.3', 'keterampilan', 'mempraktikkan kombinasi gerak dasar manipulatif'),
+(65, 6, '4.8', 'keterampilan', 'menceritakan bentuk dan manfaat istirahat'),
+(66, 6, '4.9', 'keterampilan', 'menceritakan perlunya memilih makanan bergizi dan sehat'),
+(67, 7, '3.1', 'pengetahuan', 'menggali informasi tentang unsur intrinsik karya sastra dari naskah satua Bali'),
+(68, 7, '3.2', 'pengetahuan', 'menguraikan arti yang terdapat pada teks gending Bali'),
+(69, 7, '3.3', 'pengetahuan', 'mengemukakan isi teks percakapan tentang lingkungan sosial di  Bali'),
+(70, 7, '4.1', 'keterampilan', 'menceritakan  isi satua Bali sesuai dengan unsur intrinsik karya sastra'),
+(71, 7, '4.2', 'keterampilan', 'melantunkan gending Bali yang mengandung nilai sosial budaya, pendidikan dan religius'),
+(72, 7, '4.3', 'keterampilan', 'melakukan percakapan menggunakan bahasa Bali sederhana');
 
 -- --------------------------------------------------------
 
@@ -164,7 +188,10 @@ INSERT INTO `mapel` (`id_mapel`, `nama_mapel`, `kkm`, `is_mulok`) VALUES
 (1, 'Agama Hindu', 75, 0),
 (2, 'PPKn', 75, 0),
 (3, 'Bahasa Indonesia', 65, 0),
-(4, 'Matematika', 60, 0);
+(4, 'Matematika', 60, 0),
+(5, 'Seni Budaya dan Prakarya', 75, 0),
+(6, 'Pendidikan Jasmani, Olahraga, dan Kesehatan', 75, 0),
+(7, 'Bahasa Bali', 60, 1);
 
 -- --------------------------------------------------------
 
@@ -340,7 +367,7 @@ INSERT INTO `siswa` (`id_siswa`, `id_sekolah`, `username`, `password`, `nis`, `n
 (6, 2, '1585', '1585', '1585', '0129845091', 'Gusti Ayu Putu Abdi Ningsih', 'Abdi Ningsih', 'Singaraja, 25 Oktober 2012', 'Laki-laki', 'Hindu', 'Banjar Dinas Dauh Pura', 3, 1, '2021/2022'),
 (7, 3, '1586', '1586', '1586', '3138299792', 'Gusti Ketut Adi Yoga', 'Adi Yoga', 'Buleleng, 07 Juli 2013', 'Laki-laki', 'Hindu', 'Banjar Dinas Dauh Pura', 3, 1, '2021/2022'),
 (8, 3, '1587', '1587', '1587', '3125645397', 'Gusti Ketut Alit Sudiadnyana', 'Alit Sudiadnyana', 'Panji, 07 Desember 2012', 'Laki-laki', 'Hindu', 'Banjar Dinas Dangin Pura', 3, 1, '2021/2022'),
-(9, 3, '1588', '1588', '1588', '0134394398', 'Gusti Ketut Nakula Prasetya', 'Nakula Prasetya', 'Singaraja, 05 Januari 2013', 'Laki-laki', 'Hindu', 'Banjar Dinas Dauh Pura', 3, 1, '2021/2022');
+(9, 3, 'test_username', '12345', '99999', '88888', 'saya', 'saya', 'new, 28/april/3002', 'g', 'atei', 'home', 1, 1, '2020/2021');
 
 -- --------------------------------------------------------
 
@@ -402,7 +429,27 @@ INSERT INTO `tema_mapel` (`id_tm`, `id_mapel`, `id_tema`, `id_kd`) VALUES
 (29, 4, 2, 41),
 (30, 4, 2, 42),
 (31, 4, 3, 44),
-(32, 4, 4, 43);
+(32, 4, 4, 43),
+(33, 5, 1, 49),
+(34, 5, 1, 50),
+(35, 5, 1, 51),
+(36, 5, 1, 52),
+(37, 5, 2, 50),
+(38, 5, 2, 51),
+(39, 5, 2, 49),
+(40, 5, 2, 52),
+(41, 5, 3, 50),
+(42, 5, 3, 49),
+(43, 5, 3, 52),
+(44, 5, 4, 50),
+(45, 5, 4, 51),
+(46, 5, 4, 49),
+(47, 5, 4, 52),
+(48, 6, 1, 57),
+(49, 6, 2, 58),
+(50, 6, 3, 59),
+(51, 6, 4, 60),
+(52, 6, 4, 61);
 
 -- --------------------------------------------------------
 
@@ -429,7 +476,8 @@ INSERT INTO `user` (`id_user`, `id_sekolah`, `email`, `username`, `password`, `f
 (1, 1, 'admin@gmail.com', 'admin', 'admin', 'admin', 'admin', 'admin'),
 (2, 1, 'aldy@gmail.com', 'aldyoka', 'aldyoka', 'Aldy', 'Oka', 'guru'),
 (3, 3, 'yuli@gmail.com', 'yulicahyani', 'yalicahyani', 'yuli', 'cahyani', 'guru'),
-(4, 2, 'arisurya@gmail.com', 'arisurya', 'arisurya', 'Kadek Ari', 'Surya', 'guru');
+(4, 2, 'arisurya@gmail.com', 'arisurya', 'arisurya', 'Kadek Ari', 'Surya', 'guru'),
+(7, 3, 'test@gmail.com', 'test123', '123', 'test', 'test', 'guru');
 
 --
 -- Indexes for dumped tables
@@ -564,13 +612,13 @@ ALTER TABLE `keterampilan`
 -- AUTO_INCREMENT untuk tabel `kompetensi_dasar`
 --
 ALTER TABLE `kompetensi_dasar`
-  MODIFY `id_kd` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `id_kd` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 
 --
 -- AUTO_INCREMENT untuk tabel `mapel`
 --
 ALTER TABLE `mapel`
-  MODIFY `id_mapel` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_mapel` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT untuk tabel `nilai_keterampilan`
@@ -618,13 +666,13 @@ ALTER TABLE `tema`
 -- AUTO_INCREMENT untuk tabel `tema_mapel`
 --
 ALTER TABLE `tema_mapel`
-  MODIFY `id_tm` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id_tm` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- AUTO_INCREMENT untuk tabel `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
