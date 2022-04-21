@@ -44,6 +44,37 @@ if(function_exists($_GET['function'])) {
     echo json_encode($response);
 }
 
+function getAllUser(){
+    global $connect;
+
+    if(!mysqli_connect_error()){
+        $query = mysqli_query($connect, "SELECT * FROM user");
+        if(mysqli_num_rows($query)>0){
+            while ($result = mysqli_fetch_object($query)){
+                $user[] = $result;
+            }
+    
+            $response = array(
+                'status' =>1,
+                'message'=>'Success',
+                'user'=>$user
+            );
+    
+            header('Content-Type: application/json');
+            echo json_encode($response); 
+        }else{
+            $response = array(
+                'status' =>0,
+                'message'=>'Failed',
+                'user'=>[]
+            );
+    
+            header('Content-Type: application/json');
+            echo json_encode($response); 
+        }
+    }
+}
+
 function createUser(){
     global $connect;
     
@@ -200,6 +231,7 @@ function updateUserSiswa(){
     $check_match = count(array_intersect_key($value, $value));
     if($check_match == count($check)){
         $result = mysqli_query($connect, "UPDATE `siswa` SET
+        `id_siswa` = '$value[id_siswa]',
         `id_sekolah` = '$value[id_sekolah]',
         `username` = '$value[username]',
         `password` = '$value[password]',
@@ -295,17 +327,16 @@ function deleteUserSiswa(){
 
     $check = array('id_siswa'=>'');
     $check_match = count(array_intersect_key($value, $value));
-
-    $result = mysqli_query($connect, "DELETE FROM siswa WHERE `id_siswa` = $value[id_siswa]");
+    $result = mysqli_query($connect, "DELETE FROM `siswa` WHERE `id_siswa` = '$_POST[id_siswa]'");
     if(mysqli_affected_rows($connect) != 0){
         $response = array(
             'status'=>1,
-            'message'=>'Success Update'
+            'message'=>'Success Delete'
         );
     }else{
         $response = array(
             'status'=>0,
-            'message'=>'Failed Update.'
+            'message'=>'Failed Delete'
         );
         }
 
@@ -1138,12 +1169,13 @@ function getNilaiPengetahuanSiswa(){
             $mapel[] = $result;
         }
         
-        $query = mysqli_query($connect, "SELECT semester, tahun_ajaran FROM siswa WHERE id_siswa = $id_siswa");
+        $query = mysqli_query($connect, "SELECT semester, tahun_ajaran, nama_siswa FROM siswa WHERE id_siswa = $id_siswa");
         while ($result = mysqli_fetch_object($query)){
             $siswa[] = $result;
         }
         $semester = $siswa[0]->semester;
         $tahun_ajaran = $siswa[0]->tahun_ajaran;
+        $nama_siswa = $siswa[0]->nama_siswa;
 
         $query = mysqli_query($connect, "SELECT * FROM nilai_pengetahuan WHERE id_siswa = '$id_siswa' AND semester = '$semester' AND tahun_ajaran = '$tahun_ajaran' AND id_mapel = '$id_mapel'");
         while ($result = mysqli_fetch_object($query)){
@@ -1159,6 +1191,7 @@ function getNilaiPengetahuanSiswa(){
 
             foreach($data as $key => $value){
                 $data[$key]->id_siswa = $id_siswa;
+                $data[$key]->nama_siswa = $nama_siswa;
                 $data[$key]->id_mapel = $id_mapel;
                 $data[$key]->nama_tema = '';      //mapel agama dan mulok tidak punya tema
                 $data[$key]->id_tema = '0';       //mapel agama dan mulok tidak punya tema
@@ -1199,6 +1232,7 @@ function getNilaiPengetahuanSiswa(){
 
             foreach($data as $key => $value){
                 $data[$key]->id_siswa = $id_siswa;
+                $data[$key]->nama_siswa = $nama_siswa;
                 $data[$key]->id_mapel = $id_mapel;
                 $data[$key]->is_nph = $is_nph;
                 $data[$key]->is_npts = $is_npts;
@@ -1542,12 +1576,13 @@ function getNilaiKeterampilanSiswa(){
 
     if(!mysqli_connect_error()){
         
-        $query = mysqli_query($connect, "SELECT semester, tahun_ajaran FROM siswa WHERE id_siswa = $id_siswa");
+        $query = mysqli_query($connect, "SELECT semester, tahun_ajaran, nama_siswa FROM siswa WHERE id_siswa = $id_siswa");
         while ($result = mysqli_fetch_object($query)){
             $siswa[] = $result;
         }
         $semester = $siswa[0]->semester;
         $tahun_ajaran = $siswa[0]->tahun_ajaran;
+        $nama_siswa = $siswa[0]->nama_siswa;
 
         $query = mysqli_query($connect, "SELECT * FROM nilai_keterampilan WHERE id_siswa = '$id_siswa' AND semester = '$semester' AND tahun_ajaran = '$tahun_ajaran' AND id_mapel = '$id_mapel'");
         while ($result = mysqli_fetch_object($query)){
@@ -1559,7 +1594,7 @@ function getNilaiKeterampilanSiswa(){
             $keterampilan[] = $result;
         }
 
-        $query = mysqli_query($connect, "SELECT kompetensi_dasar.id_kd, kompetensi_dasar.kode_kd from kompetensi_dasar WHERE kategori_kd = 'keterampilan' AND id_mapel = $id_mapel");
+        $query = mysqli_query($connect, "SELECT kompetensi_dasar.id_kd, kompetensi_dasar.kode_kd, kompetensi_dasar.deskripsi_kd from kompetensi_dasar WHERE kategori_kd = 'keterampilan' AND id_mapel = $id_mapel");
         while ($result = mysqli_fetch_object($query)){
             $kd_keterampilan[] = $result;
         }
@@ -1567,7 +1602,7 @@ function getNilaiKeterampilanSiswa(){
         $data=[];
         foreach($kd_keterampilan as $key => $kd){
             foreach($keterampilan as $kt){
-                array_push($data,['id_mapel'=>$id_mapel, 'id_kd'=>$kd->id_kd, 'kode_kd'=>$kd->kode_kd, 'id_kt'=>$kt->id_kt, 'nama_keterampilan'=>$kt->nama_keterampilan, 'nilai_kt'=>'0']);
+                array_push($data,['id_siswa'=>$id_siswa, 'nama_siswa'=>$nama_siswa, 'id_mapel'=>$id_mapel, 'id_kd'=>$kd->id_kd, 'kode_kd'=>$kd->kode_kd, 'deskripsi_kd'=>$kd->deskripsi_kd, 'id_kt'=>$kt->id_kt, 'nama_keterampilan'=>$kt->nama_keterampilan, 'nilai_kt'=>'']);
             }
         }
 
@@ -1584,7 +1619,7 @@ function getNilaiKeterampilanSiswa(){
         $response = array(
             'status' =>1,
             'message'=>'Success',
-            'siswa'=>$data
+            'nilaiketerampilan'=>$data
         );
 
         header('Content-Type: application/json');
