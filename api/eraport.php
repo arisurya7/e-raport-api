@@ -200,6 +200,7 @@ function updateUserSiswa(){
     $check_match = count(array_intersect_key($value, $value));
     if($check_match == count($check)){
         $result = mysqli_query($connect, "UPDATE `siswa` SET
+        `id_siswa` = '$value[id_siswa]',
         `id_sekolah` = '$value[id_sekolah]',
         `username` = '$value[username]',
         `password` = '$value[password]',
@@ -295,17 +296,16 @@ function deleteUserSiswa(){
 
     $check = array('id_siswa'=>'');
     $check_match = count(array_intersect_key($value, $value));
-
-    $result = mysqli_query($connect, "DELETE FROM siswa WHERE `id_siswa` = $value[id_siswa]");
+    $result = mysqli_query($connect, "DELETE FROM `siswa` WHERE `id_siswa` = '$_POST[id_siswa]'");
     if(mysqli_affected_rows($connect) != 0){
         $response = array(
             'status'=>1,
-            'message'=>'Success Update'
+            'message'=>'Success Delete'
         );
     }else{
         $response = array(
             'status'=>0,
-            'message'=>'Failed Update.'
+            'message'=>'Failed Delete'
         );
         }
 
