@@ -160,9 +160,9 @@ function deleteUser(){
     
     parse_str(file_get_contents('php://input'), $value);
 
-    if($value['id_user']){
+    if($_POST['id_user']){
         //Delete data
-        $result = mysqli_query($connect, "DELETE FROM user WHERE `id_user`= $value[id_user]");
+        $result = mysqli_query($connect, "DELETE FROM user WHERE `id_user`= $_POST[id_user]");
 
         if(mysqli_affected_rows($connect)){
             $response = array(
