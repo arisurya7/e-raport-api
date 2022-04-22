@@ -10,7 +10,7 @@ if(isset($_COOKIE['cookie_username'])){
     $cookie_username = $_COOKIE['cookie_username'];
     $cookie_password = $_COOKIE['cookie_password'];
 
-    $sql1 = "select * from siswa where username = '$cookie_username'";
+    $sql1 = "SELECT * FROM siswa WHERE username = '$cookie_username'";
     $q1   = mysqli_query($koneksi,$sql1);
     $r1   = mysqli_fetch_array($q1);
     if($r1['password'] == $cookie_password){
@@ -32,7 +32,7 @@ if(isset($_POST['login'])){
     if($username == '' or $password == ''){
         $err .= "<li>Silakan masukkan username dan juga password.</li>";
     }else{
-        $sql1 = "select * from siswa where username = '$username'";
+        $sql1 = "SELECT * FROM siswa WHERE username = '$username'";
         $q1   = mysqli_query($koneksi,$sql1);
         $r1   = mysqli_fetch_array($q1);
 
