@@ -147,6 +147,11 @@ include "koneksi.php";
                             LEFT JOIN final_nilai_pengetahuan ON mapel.id_mapel = final_nilai_pengetahuan.id_mapel 
                             WHERE is_mulok = 1 AND id_siswa = '$tampil[id_siswa]'";
                     $mapel = mysqli_query($koneksi,$qri);
+                    $qri = "SELECT * FROM mapel 
+                            LEFT JOIN final_nilai_pengetahuan ON mapel.id_mapel = final_nilai_pengetahuan.id_mapel 
+                            WHERE is_mulok = 1 AND id_siswa = '$tampil[id_siswa]'";
+                    $keterampilan = mysqli_query($koneksi,$qri);
+                    $tampil_keterampilan = mysqli_fetch_array($keterampilan);
                     while ($tampil_mapel = mysqli_fetch_array($mapel)){
                 ?>         
                         <tr class="table-primary">
@@ -154,9 +159,9 @@ include "koneksi.php";
                             <td class="table-primary"><?=$tampil_mapel['nilai_akhir']?></td>
                             <td class="table-primary"><?=$tampil_mapel['predikat']?></td>
                             <td class="table-primary"><?=$tampil_mapel['deskripsi']?></td>
-                            <td class="table-primary">tes</td>
-                            <td class="table-primary"></td>
-                            <td class="table-primary"></td>
+                            <td class="table-primary"><?=$tampil_keterampilan['nilai_akhir']?></td>
+                            <td class="table-primary"><?=$tampil_keterampilan['predikat']?></td>
+                            <td class="table-primary"><?=$tampil_keterampilan['deskripsi']?></td>
                         </tr>
                 <?php } ?>
         </table>
