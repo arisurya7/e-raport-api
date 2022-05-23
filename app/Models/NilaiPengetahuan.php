@@ -9,12 +9,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Lumen\Auth\Authorizable;
 
-class User extends Model implements AuthenticatableContract, AuthorizableContract
+class NilaiPengetahuan extends Model implements AuthenticatableContract, AuthorizableContract
 {
     use Authenticatable, Authorizable, HasFactory;
 
-    protected $primaryKey = 'id_user';
-    protected $hidden = [
-        'password',
-    ];
+    protected $primaryKey = 'id_np';
+    protected $table = 'nilai_pengetahuan';
 }
