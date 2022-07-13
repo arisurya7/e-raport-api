@@ -17,4 +17,17 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $hidden = [
         'password',
     ];
+    
+    protected $fillable = [
+        'email',
+        'username', 
+        'password',
+        'firstname', 
+        'lastname', 
+        'role',
+        'nip', 
+        'gelar',
+        'id_sekolah',
+        'token'
+    ];
 }
