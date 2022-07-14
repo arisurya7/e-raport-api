@@ -15,4 +15,11 @@ class Mapel extends Model implements AuthenticatableContract, AuthorizableContra
 
     protected $primaryKey = 'id_mapel';
     protected $table = 'mapel';
+    protected $fillable = [
+        'id_user',
+        'nama_mapel',
+        'kkm',
+        'is_mulok',
+        'is_religion'
+    ];
 }

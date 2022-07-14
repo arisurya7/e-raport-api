@@ -15,4 +15,18 @@ class Siswa extends Model implements AuthenticatableContract, AuthorizableContra
 
     protected $primaryKey = 'id_siswa';
     protected $table = 'siswa';
+    protected $fillable = [
+        'id_user',
+        'username',
+        'password',
+        'nis',
+        'nisn',
+        'nama_siswa',
+        'nama_panggilan',
+        'ttl',
+        'jenis_kelamin',
+        'agama',
+        'alamat',
+        'kelas'
+    ];
 }

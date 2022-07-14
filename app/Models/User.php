@@ -28,6 +28,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'nip', 
         'gelar',
         'id_sekolah',
-        'token'
+        'token' 
     ];
 }

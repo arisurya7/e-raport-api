@@ -110,7 +110,7 @@ class UserController extends BaseController
             $user->save();
             return response()->json([
                 'success' => true,
-                'message' => 'data user success updated'
+                'message' => 'update user success'
             ], 200);
         } else {
             return response()->json([

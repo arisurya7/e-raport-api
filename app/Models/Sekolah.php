@@ -15,4 +15,13 @@ class Sekolah extends Model implements AuthenticatableContract, AuthorizableCont
 
     protected $primaryKey = 'id_sekolah';
     protected $table = 'sekolah';
+    protected $fillable = [
+        'nama_sekolah',
+        'telp',
+        'alamat',
+        'kelurahan',
+        'kecamatan',
+        'kabupaten',
+        'provinsi'
+    ];
 }
