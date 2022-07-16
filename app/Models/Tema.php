@@ -15,4 +15,17 @@ class Tema extends Model implements AuthenticatableContract, AuthorizableContrac
 
     protected $primaryKey = 'id_tema';
     protected $table = 'tema';
+    protected $fillable = ['id_mapel', 'nama_tema'];
+
+    public function temakd(){
+        return $this->hasMany(TemaKd::class);
+    }
+
+    public function temajenis(){
+        return $this->hasMany(TemaJenis::class);
+    }
+
+    public function mapel(){
+        return $this->belongsTo(Mapel::class, 'id_mapel');
+    }
 }

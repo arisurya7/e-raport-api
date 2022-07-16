@@ -16,7 +16,7 @@ class CreateTemasTable extends Migration
         Schema::create('tema', function (Blueprint $table) {
             $table->id('id_tema');
             $table->foreignId('id_mapel');
-            $table->foreignId('nama_tema');
+            $table->string('nama_tema');
             $table->timestamps();
         });
 

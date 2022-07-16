@@ -30,4 +30,20 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'id_sekolah',
         'token' 
     ];
+
+    public function mapel(){
+        return $this->hasMany(Mapel::class);
+    }
+
+    public function kompetensidasar(){
+        return $this->hasManyThrough(KompetensiDasar::class, Mapel::class);
+    }
+
+    public function siswa(){
+        return $this->hasMany(Siswa::class);
+    }
+
+    public function sekolah(){
+        return $this->hasOne(Sekolah::class);
+    }
 }

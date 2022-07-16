@@ -15,4 +15,21 @@ class KompetensiDasar extends Model implements AuthenticatableContract, Authoriz
 
     protected $primaryKey = 'id_kd';
     protected $table = 'kompetensi_dasar';
+    protected $fillable = ['id_mapel', 'kode_kd', 'kategori_kd', 'deskripsi_kd'];
+
+    public function mapel(){
+        return $this->belongsTo(Mapel::class, 'id_mapel');
+    }
+
+    public function temakd(){
+        return $this->hasMany(TemaKd::class);
+    }
+
+    public function nilaiketerampilan(){
+        return $this->hasMany(NilaiKeterampilan::class);
+    }
+
+    public function nilaipengetahuan(){
+        return $this->hasMany(NilaiPengetahuan::class);
+    }
 }

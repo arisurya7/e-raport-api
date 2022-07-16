@@ -44,5 +44,29 @@ $router->group(['prefix' => 'api/v1'], function ($router) {
         $router->put('/siswa/{id}', "SiswaController@update");
         $router->delete('/siswa/{id}', "SiswaController@destroy");
         
+        //kompetensi dasar
+        $router->post('/kompetensidasar', "KompetensiDasarController@store");
+        $router->get('/kompetensidasar', "KompetensiDasarController@show");
+        $router->put('/kompetensidasar/{id}', "KompetensiDasarController@update");
+        $router->delete('/kompetensidasar/{id}', "KompetensiDasarController@destroy");
+
+        //tema
+        $router->post('/tema', "TemaController@store");
+        $router->get('/tema', "TemaController@show");
+        $router->put('/tema/{id}', "TemaController@update");
+        $router->delete('/tema/{id}', "TemaController@destroy");
+
+        //tema kd
+        $router->post('/temakd', "TemaKdController@store");
+        $router->get('/temakd', "TemaKdController@show");
+        $router->put('/temakd/{id}', "TemaKdController@update");
+        $router->delete('/temakd/{id}', "TemaKdController@destroy");
+
+        //tema kd
+        $router->post('/temajenis', "TemaJenisController@store");
+        $router->get('/temajenis', "TemaJenisController@show");
+        $router->put('/temajenis/{id}', "TemaJenisController@update");
+        $router->delete('/temajenis/{id}', "TemaJenisController@destroy");
+        
     });
 });

@@ -15,4 +15,14 @@ class JenisNilai extends Model implements AuthenticatableContract, AuthorizableC
 
     protected $primaryKey = 'id_jn';
     protected $table = 'jenis_nilai';
+
+    protected $fillable = ['nama'];
+
+    public function temajenis(){
+        return $this->hasMany(TemaJenis::class);
+    }
+
+    public function nilaipengetahuan(){
+        return $this->hasMany(NilaiPengetahuan::class);
+    }
 }

@@ -22,4 +22,12 @@ class Mapel extends Model implements AuthenticatableContract, AuthorizableContra
         'is_mulok',
         'is_religion'
     ];
+
+    public function user(){
+        return $this->belongsTo(User::class, 'id_user');
+    }
+
+    public function kompetensidasar(){
+        return $this->hasMany(KompetensiDasar::class);
+    }
 }
