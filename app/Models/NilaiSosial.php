@@ -15,4 +15,15 @@ class NilaiSosial extends Model implements AuthenticatableContract, Authorizable
 
     protected $primaryKey = 'id_sosial';
     protected $table = 'nilai_sosial';
+    protected $fillable = [
+        'id_siswa', 
+        'id_ta', 
+        'jujur', 
+        'disiplin', 
+        'tanggung_jawab', 
+        'santun', 
+        'peduli',
+        'percaya_diri',
+        'deskripsi'
+    ];
 }

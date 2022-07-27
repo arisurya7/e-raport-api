@@ -67,6 +67,12 @@ $router->group(['prefix' => 'api/v1'], function ($router) {
         $router->get('/temajenis', "TemaJenisController@show");
         $router->put('/temajenis/{id}', "TemaJenisController@update");
         $router->delete('/temajenis/{id}', "TemaJenisController@destroy");
+
+        //nilai_sosial
+        $router->post('/nilaisosial', "NilaiSosialController@store");
+        $router->get('/nilaisosial', "NilaiSosialController@show");
+        $router->get('/nilaisosial/{id}', "NilaiSosialController@detail");
+        $router->put('/nilaisosial/{id}', "NilaiSosialController@update");
         
     });
 });
