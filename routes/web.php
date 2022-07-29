@@ -73,6 +73,25 @@ $router->group(['prefix' => 'api/v1'], function ($router) {
         $router->get('/nilaisosial', "NilaiSosialController@show");
         $router->get('/nilaisosial/{id}', "NilaiSosialController@detail");
         $router->put('/nilaisosial/{id}', "NilaiSosialController@update");
+
+        //nilai_spiritual
+        $router->post('/nilaispiritual', "NilaiSpiritualController@store");
+        $router->get('/nilaispiritual', "NilaiSpiritualController@show");
+        $router->get('/nilaispiritual/{id}', "NilaiSpiritualController@detail");
+        $router->put('/nilaispiritual/{id}', "NilaiSpiritualController@update");
+
+        //jenis nilai
+        $router->get('/jenisnilai', "JenisNilaiController@show");
+
+        //list penilaian
+        $router->get('/penilaian-pengetahuan', "KompetensiDasarController@pengetahuan");
+        $router->get('/penilaian-keterampilan', "KompetensiDasarController@keterampilan");
+
+        //nilai pengetahuan
+        
+        //nilai keterampilan
+
+        //raport
         
     });
 });

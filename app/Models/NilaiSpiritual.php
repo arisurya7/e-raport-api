@@ -9,10 +9,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Lumen\Auth\Authorizable;
 
-class NilaiSpritual extends Model implements AuthenticatableContract, AuthorizableContract
+class NilaiSpiritual extends Model implements AuthenticatableContract, AuthorizableContract
 {
     use Authenticatable, Authorizable, HasFactory;
 
     protected $primaryKey = 'id_spiritual';
     protected $table = 'nilai_spiritual';
+    protected $fillable = [
+        'id_siswa', 
+        'id_ta', 
+        'ketaatan_beribadah', 
+        'berprilaku_bersyukur', 
+        'berdoa', 
+        'toleransi',
+        'deskripsi'
+    ];
 }

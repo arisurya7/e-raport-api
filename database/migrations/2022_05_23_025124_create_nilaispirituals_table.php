@@ -19,7 +19,7 @@ class CreateNilaispiritualsTable extends Migration
             $table->foreignId('id_ta')->unsigned();
             $table->string('ketaatan_beribadah', 5);
             $table->string('berprilaku_bersyukur', 5);
-            $table->string('bedoa', 5);
+            $table->string('berdoa', 5);
             $table->string('toleransi', 5);
             $table->text('deskripsi');
             $table->timestamps();
