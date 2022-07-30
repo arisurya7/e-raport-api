@@ -88,10 +88,17 @@ $router->group(['prefix' => 'api/v1'], function ($router) {
         $router->get('/penilaian-keterampilan', "KompetensiDasarController@keterampilan");
 
         //nilai pengetahuan
+        $router->post('/nilai-pengetahuan', "NilaiPengetahuanController@store");
+        $router->put('/nilai-pengetahuan/{id}', "NilaiPengetahuanController@update");
+        $router->delete('/nilai-pengetahuan/{id}', "NilaiPengetahuanController@destroy");
         
         //nilai keterampilan
+        $router->post('/nilai-keterampilan', "NilaiKeterampilanController@store");
+        $router->put('/nilai-keterampilan/{id}', "NilaiKeterampilanController@update");
+        $router->delete('/nilai-keterampilan/{id}', "NilaiKeterampilanController@destroy");
 
         //raport
+        $router->get('/raport', "RaportController@show");
         
     });
 });
