@@ -24,6 +24,7 @@ class UsersTableSeeder extends Seeder
             'role' => 'admin',
             'email' => 'user1@gmail.com',
             'nip' => '1234',
+            'token'=>'f9a7a8d618b03edbc9742ee8465f6804c46e2a4d16278750bfb9e73e7c4a3e79d60dd8af16b960b5',
             'gelar' => 'S.Pd.',
         ]);
 
