@@ -142,7 +142,9 @@ class KompetensiDasarController extends BaseController{
             'id_mapel' => 'required',
         ]);
 
-        $kompetensi_dasar = KompetensiDasar::where('id_mapel', $request->query('id_mapel'))->get(['id_kd','kode_kd','deskripsi_kd']);
+        $kompetensi_dasar = KompetensiDasar::where('id_mapel', $request->query('id_mapel'))
+                                            ->where('kategori_kd', 'keterampilan')
+                                            ->get(['id_kd','kode_kd','deskripsi_kd']);
         $keterampilan = Keterampilan::all();
         $nilai_keterampilan = NilaiKeterampilan::where('id_siswa', $request->query('id_siswa'))
                                                 ->where('id_mapel', $request->query('id_mapel'))

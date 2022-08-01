@@ -15,4 +15,13 @@ class NilaiPengetahuan extends Model implements AuthenticatableContract, Authori
 
     protected $primaryKey = 'id_np';
     protected $table = 'nilai_pengetahuan';
+    protected $fillable = [
+        'id_siswa', 
+        'id_ta', 
+        'id_mapel', 
+        'id_kd', 
+        'id_tema', 
+        'id_jn', 
+        'nilai',
+    ];
 }

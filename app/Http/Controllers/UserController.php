@@ -34,7 +34,6 @@ class UserController extends BaseController
             'email' => $request->input('email'),
             'nip' => $request->input('nip'),
             'gelar' => $request->input('gelar'),
-            'token' => $request->input('token'),
             'id_sekolah' => $request->input('id_sekolah')
         ]);
 

@@ -15,4 +15,12 @@ class NilaiKeterampilan extends Model implements AuthenticatableContract, Author
 
     protected $primaryKey = 'id_nk';
     protected $table = 'nilai_keterampilan';
+    protected $fillable = [
+        'id_siswa', 
+        'id_ta', 
+        'id_mapel', 
+        'id_kd', 
+        'id_kt', 
+        'nilai',
+    ];
 }
