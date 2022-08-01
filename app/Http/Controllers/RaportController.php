@@ -15,8 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Auth;
 
 class RaportController extends BaseController
-{
-    
+{    
     public function show(Request $request){
         $this->validate($request, [
             'id_siswa' => 'required',
@@ -41,18 +40,11 @@ class RaportController extends BaseController
         $max_kd = [0,''];
         $na_nk = [];
         $nilai_pengetahuan = [];
-        
         foreach ($pengetahuan_kd as $key => $pengetahuan) {
             if (in_array($pengetahuan->id_mapel, $idf_mapel)) {
                 //cek min max
-                if($min_kd[0] > $pengetahuan->na) {
-                    $min_kd[0] = $pengetahuan->na;
-                    $min_kd[1] = $pengetahuan->deskripsi_kd;
-                }
-                if($max_kd[0] < $pengetahuan->na) {
-                    $max_kd[0] = $pengetahuan->na;
-                    $max_kd[1] = $pengetahuan->deskripsi_kd;
-                }
+                $min_kd = checkMinValue($min_kd, $pengetahuan);
+                $max_kd = checkMaxValue($max_kd, $pengetahuan);
 
                 //hitung
                 array_push($na_nk,$pengetahuan->na);
@@ -72,14 +64,8 @@ class RaportController extends BaseController
                 $na_nk = [];
 
                 //cek min max
-                if($min_kd[0] > $pengetahuan->na) {
-                    $min_kd[0] = $pengetahuan->na;
-                    $min_kd[1] = $pengetahuan->deskripsi_kd;
-                }
-                if($max_kd[0] < $pengetahuan->na) {
-                    $max_kd[0] = $pengetahuan->na;
-                    $max_kd[1] = $pengetahuan->deskripsi_kd;
-                }
+                $min_kd = checkMinValue($min_kd, $pengetahuan);
+                $max_kd = checkMaxValue($max_kd, $pengetahuan);
                 
                 //hitung
                 array_push($na_nk,$pengetahuan->na);
@@ -100,25 +86,82 @@ class RaportController extends BaseController
                 array_push($idf_mapel, $pengetahuan->id_mapel);
             }
 
+        }
+
+        //finding nilai akhir keterampilan
+        $idf_mapel = [];
+        $min_kd = [9999999999,''];
+        $max_kd = [0,''];
+        $na_nk = [];
+        $nilai_keterampilan = [];
+        foreach ($keterampilan_kd as $key => $keterampilan) {
+            if (in_array($keterampilan->id_mapel, $idf_mapel)) {
+                //cek min max
+                $min_kd = checkMinValue($min_kd, $keterampilan);
+                $max_kd = checkMaxValue($max_kd, $keterampilan);
+
+                //hitung
+                array_push($na_nk,$keterampilan->na);
+                $avg_na = array_sum($na_nk)/count($na_nk);
+                $predikat = $avg_na==0? '' : checkPredikatScore($avg_na)[0];
+                $deskripsi = $avg_na==0? '' : $siswa->nama_panggilan.' '. checkPredikatScore($max_kd[0])[1]. ' dalam ' .$max_kd[1].', ' . checkPredikatScore($min_kd[0])[1].' dalam ' .$min_kd[1].'.';
+               
+                //update
+                $nilai_keterampilan[$keterampilan->id_mapel]['nilai'] = $avg_na;
+                $nilai_keterampilan[$keterampilan->id_mapel]['predikat'] = $predikat;
+                $nilai_keterampilan[$keterampilan->id_mapel]['deskripsi'] = $deskripsi;                  
+               
+            } else {
+                //reset nilai
+                $min_kd = [9999999999,''];
+                $max_kd = [0,''];
+                $na_nk = [];
+
+                //cek min max
+                $min_kd = checkMinValue($min_kd, $keterampilan);
+                $max_kd = checkMaxValue($max_kd, $keterampilan);
                 
+                //hitung
+                array_push($na_nk,$keterampilan->na);
+                $avg_na = array_sum($na_nk)/count($na_nk);
+                $predikat = $avg_na==0? '' : checkPredikatScore($avg_na)[0];
+                $deskripsi = $avg_na==0? '' : $siswa->nama_panggilan.' '. checkPredikatScore($max_kd[0])[1]. ' dalam ' .$max_kd[1].', ' . checkPredikatScore($min_kd[0])[1].' dalam ' .$min_kd[1].'.';
+
+                //create
+                $nilai_keterampilan[$keterampilan->id_mapel] = [ 
+                    'id_mapel' => $keterampilan->id_mapel,
+                    'nama_mapel' => $keterampilan->nama_mapel,
+                    'kkm' => $keterampilan->kkm,
+                    'nilai' => $avg_na,
+                    'predikat' => $predikat,
+                    'deskripsi' => $deskripsi
+                ];
+
+                array_push($idf_mapel, $keterampilan->id_mapel);
+            }
 
         }
-        dd($nilai_pengetahuan);
-    
 
-        /*
+        $raport = [
+            'siswa' => $siswa,
+            'sekolah' => $sekolah,
+            'nilai_sosial' => $nilai_sosial,
+            'nilai_spiritual' => $nilai_spiritual,
+            'nilai_pengetahuan' => array_values($nilai_pengetahuan),
+            'nilai_keterampilan' => array_values($nilai_keterampilan)
+        ];
+
         if($raport) {
             return response()->json([
                 'success' => true,
-                'message' => 'success add nilai'
-            ], 201);
+                'data' => $raport
+            ], 200);
         }
 
         return response()->json([
             'success' => false,
-            'message' => 'fail add nilai'
+            'message' => 'fail get raport'
         ], 400);
-        */
 
     }
 
@@ -136,5 +179,23 @@ function checkPredikatScore($score){
     }else if ($score <= 59){
        return ['D','perlu bimbingan'];
     }
+ }
+
+ function checkMinValue($arr_val, $values){
+    $min_val = $arr_val;
+    if($min_val[0] > $values->na) {
+        $min_val[0] = $values->na;
+        $min_val[1] = $values->deskripsi_kd;
+    }
+    return $min_val;
+ }
+
+ function checkMaxValue($arr_val, $values){
+    $max_val = $arr_val;
+    if($max_val[0] < $values->na) {
+        $max_val[0] = $values->na;
+        $max_val[1] = $values->deskripsi_kd;
+    }
+    return $max_val;
  }
 
